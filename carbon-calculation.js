@@ -14,28 +14,18 @@ new Vue({
         date: new Date().toISOString().split('T')[0],
     },
     methods: {
-        checkAuthentication() {
-            const token = localStorage.getItem('token');
-            if (token) {
-                this.isAuthenticated = true;
-                this.userName = localStorage.getItem('userName') || '';
-            } else {
-                this.isAuthenticated = false;
-                window.location.href = 'login.html';
-            }
-        },
         logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('userName');
             this.isAuthenticated = false;
             this.userName = '';
             alert('Вы вышли из системы');
-            window.location.href = 'login.html';
+            window.open('/', '_self')
         },
         async fetchData() {
             const token = localStorage.getItem('token');
             if (!token) return;
-            const response = await axios.get('http://localhost:3000/data', {
+            const response = await axios.get('/data', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -46,7 +36,7 @@ new Vue({
 
         async login() {
             try {
-                const response = await axios.post('http://localhost:3000/login', {
+                const response = await axios.post('/login', {
                     email: this.email,
                     password: this.password,
                 });
@@ -62,7 +52,7 @@ new Vue({
 
         async register() {
             try {
-                const response = await axios.post('http://localhost:3000/register', {
+                const response = await axios.post('/register', {
                     email: this.email,
                     password: this.password,
                 });
@@ -100,7 +90,7 @@ new Vue({
             }
 
             try {
-                await axios.post('http://localhost:3000/data', data, {
+                await axios.post('/data', data, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
             } catch (error) {
@@ -129,7 +119,7 @@ new Vue({
             }
 
             try {
-                const response = await axios.post('http://localhost:3000/upload-carbon-footprint', formData, {
+                const response = await axios.post('/upload-carbon-footprint', formData, {
                     headers: { 
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data' 
@@ -151,7 +141,7 @@ new Vue({
         },
 
         goBackToHome() {
-            window.location.href = 'index.html';
+            window.open('/home', '_self')
         }
     },
 
@@ -159,6 +149,12 @@ new Vue({
         const token = localStorage.getItem('token');
         if (token) {
             this.isAuthenticated = true;
+            this.userName = localStorage.getItem('userName') || '';
+            console.log(this.userName);
+            
+        } else {
+            this.isAuthenticated = false;
+            window.open('/', '_self')
         }
     }
 });
