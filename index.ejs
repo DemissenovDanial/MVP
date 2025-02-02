@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #app { max-width: 600px; margin: auto; }
+        canvas { max-width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="position-absolute top-0 start-0">
+            <button class="btn m-2 btn-outline-danger" v-if="isAuthenticated" @click="logout">Выйти</button>
+        </div>
+
+        <h2 class="m-5">Углеродный след</h2>
+
+        <div class="mb-3">
+            <input v-model="date" type="date">
+            <input v-model="emission" type="number" placeholder="Выбросы CO₂ (кг)">
+            <button class="btn btn-outline-primary p-1" @click="addEntry">Добавить</button>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <div class="m-2"><input class="form-control" type="file" @change="handleFileUpload"></div>
+            <button class="btn btn-outline-primary m-2" @click="uploadData">Загрузить данные</button>
+        </div>
+        
+        <h3>График выбросов</h3>
+        <canvas id="emissionsChart"></canvas>
+
+        <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-outline-dark" @click="goToCarbonCalculation">Перейти на страницу расчета углеродного следа
+                <svg width="17" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
+            </button>
+        </div>
+
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

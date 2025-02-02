@@ -21,7 +21,7 @@ new Vue({
                 this.userName = localStorage.getItem('userName') || '';
             } else {
                 this.isAuthenticated = false;
-                window.location.href = 'login.html';
+                window.open('/', '_self')
             }
         },
         logout() {
@@ -30,12 +30,12 @@ new Vue({
             this.isAuthenticated = false;
             this.userName = '';
             alert('Вы вышли из системы');
-            window.location.href = 'login.html';
+            window.open('/', '_self')
         },
         async fetchData() {
             const token = localStorage.getItem('token');
             if (!token) return;
-            const response = await axios.get('http://localhost:3000/data', {
+            const response = await axios.get('/data', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -48,7 +48,7 @@ new Vue({
             if (!this.date || !this.emission) return;
             const formattedDate = new Date(this.date).toLocaleDateString('ru-RU');
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:3000/data', 
+            await axios.post('/data', 
                 { date: formattedDate, emission: parseFloat(this.emission) }, 
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -72,7 +72,7 @@ new Vue({
             formData.append('file', this.file);
 
             try {
-                await axios.post('http://localhost:3000/upload', formData, {
+                await axios.post('/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`
@@ -101,7 +101,7 @@ new Vue({
             formData.append('file', this.fileCarbon);
 
             try {
-                await axios.post('http://localhost:3000/upload-carbon-footprint', formData, {
+                await axios.post('/upload-carbon-footprint', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`
@@ -158,7 +158,7 @@ new Vue({
         },
 
         goToCarbonCalculation() {
-            window.location.href = 'carbon-calculation.html';
+            window.open('/carbon', '_self')
         },
     }
     }

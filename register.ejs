@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #app { max-width: 600px; margin: auto; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="m-5">
+            <h2>Регистрация</h2>
+            <div class="d-flex flex-column">        
+                <input class="m-2" v-model="name" type="text" placeholder="Имя">
+                <input class="m-2" v-model="email" type="email" placeholder="Email">
+                <inpuT class="m-2" v-model="password" type="password" placeholder="Пароль">
+                <div class="d-flex justify-content-between">
+                    <button class="m-2 btn btn-outline-primary"  @click="goToLogin">Есть аккаунт?</button>
+                    <button class="m-2 btn btn-outline-success" @click="register">Зарегистрироваться</button>
+                </div>
+                <p>{{ message }}</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                name: '',
+                email: '',
+                password: '',
+                message: ''
+            },
+            methods: {
+                async register() {
+                    try {
+                        const response = await axios.post('/register', {
+                            name: this.name,
+                            email: this.email,
+                            password: this.password
+                        });
+                        this.message = response.data.message;
+
+                        if (response.data.success) {
+                            window.open('/', '_self')
+                        }
+                    } catch (error) {
+                        this.message = 'Ошибка регистрации';
+                        console.error(error);
+                    }
+                },
+                goToLogin() {
+                    window.open('/', '_self')
+                },
+            }
+        });
+    </script>
+</body>
+</html>

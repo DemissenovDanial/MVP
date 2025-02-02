@@ -1,4 +1,5 @@
 const express = require('express');
+const https = require("https")
 const mongoose = require('mongoose');
 const cors = require('cors');
 const multer = require('multer');
@@ -7,6 +8,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const app = express();
+
+const path = require('path');
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname));
+app.use("/", express.static(__dirname));
+app.use(express.urlencoded({extended: true}));
+
 app.use(express.json());
 app.use(cors());
 
@@ -28,6 +36,22 @@ const Carbon = mongoose.model('Carbon', new mongoose.Schema({
     water: Number,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }), 'Carbon');
+
+app.get('/', (req, res)=>{
+    res.render('login')
+})
+
+app.get('/reg', (req, res)=>{
+    res.render('register')
+})
+
+app.get('/home', (req, res)=>{
+    res.render('index')
+})
+
+app.get('/carbon', (req, res)=>{
+    res.render('carbon-calculation')
+})
 
 app.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
@@ -59,7 +83,7 @@ app.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
-    res.json({ token });
+    res.json({ token: token, userName: user.name });
 });
 
 const authMiddleware = (req, res, next) => {
